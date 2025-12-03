@@ -1,31 +1,96 @@
 <template>
   <div class="result-container">
+    <!-- SVG 그라데이션 정의 (숨김) -->
+    <svg width="0" height="0" style="position: absolute; pointer-events: none;">
+      <defs>
+        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" style="stop-color:#FFB5D8;stop-opacity:1" />
+          <stop offset="100%" style="stop-color:#C4A5FF;stop-opacity:1" />
+        </linearGradient>
+      </defs>
+    </svg>
+
+    <!-- 배경 장식 -->
+    <div class="floating-decoration">
+      <span class="deco">✨</span>
+      <span class="deco">💫</span>
+      <span class="deco">⭐</span>
+      <span class="deco">🌟</span>
+    </div>
+
     <div class="result-content">
+      <!-- 메인 결과 카드 -->
       <div class="result-card">
-        <div class="emoji">{{ resultData.emoji }}</div>
+        <!-- 상단 리본 -->
+        <div class="ribbon">
+          <span>나의 연애 유형</span>
+        </div>
+
+        <!-- 이모지 -->
+        <div class="emoji-wrapper">
+          <div class="emoji-circle">
+            <div class="emoji">{{ resultData.emoji }}</div>
+          </div>
+        </div>
+
+        <!-- 유형명 -->
         <h1 class="type-name">{{ resultData.name }}</h1>
         <p class="subtitle">{{ resultData.subtitle }}</p>
-        
-        <div class="description">
-          <h3>연애 스타일</h3>
-          <p>{{ resultData.description }}</p>
+
+        <!-- 구분선 -->
+        <div class="divider"></div>
+
+        <!-- 연애 스타일 섹션 -->
+        <div class="info-section style-section">
+          <div class="section-header">
+            <span class="section-icon">💝</span>
+            <h3>연애 스타일</h3>
+          </div>
+          <p class="section-content">{{ resultData.description }}</p>
         </div>
 
-        <div class="success-rate">
-          <h3>썸 성공률</h3>
-          <div class="rate-number">⭐ {{ resultData.successRate }}%</div>
-          <p class="rate-comment">{{ resultData.comment }}</p>
+        <!-- 썸 성공률 섹션 -->
+        <div class="info-section success-section">
+          <div class="section-header">
+            <span class="section-icon">📊</span>
+            <h3>썸 성공률</h3>
+          </div>
+          <div class="success-rate-display">
+            <div class="rate-circle">
+              <svg class="rate-svg" viewBox="0 0 100 100">
+                <circle class="rate-bg" cx="50" cy="50" r="45"></circle>
+                <circle 
+                  class="rate-fill" 
+                  cx="50" 
+                  cy="50" 
+                  r="45"
+                  :style="{ strokeDashoffset: rateOffset }"
+                ></circle>
+              </svg>
+              <div class="rate-text">
+                <span class="rate-number">{{ resultData.successRate }}</span>
+                <span class="rate-percent">%</span>
+              </div>
+            </div>
+          </div>
+          <p class="section-content">{{ resultData.comment }}</p>
         </div>
 
+        <!-- 버튼들 -->
         <div class="buttons">
-          <button class="restart-button" @click="restart">
-            다시 테스트
-          </button>
           <button class="share-button" @click="share">
-            링크 복사
+            <span class="button-icon">🔗</span>
+            <span>링크 복사</span>
+          </button>
+          <button class="restart-button" @click="restart">
+            <span class="button-icon">🔄</span>
+            <span>다시 하기</span>
           </button>
         </div>
       </div>
+
+      <!-- 하단 메시지 -->
+      <p class="bottom-message">친구들도 테스트 해보세요!</p>
     </div>
   </div>
 </template>
@@ -46,18 +111,23 @@ const resultData = computed(() => {
   return results[resultType.value]
 })
 
+// 썸 성공률 원형 게이지용
+const rateOffset = computed(() => {
+  const rate = resultData.value.successRate
+  const circumference = 2 * Math.PI * 45
+  return circumference - (rate / 100) * circumference
+})
+
 const restart = () => {
   router.push('/')
 }
 
 const share = async () => {
-//   const shareText = `나는 ${resultData.value.emoji} ${resultData.value.name}! 썸 성공률 ${resultData.value.successRate}%! 너는 어때?\n${window.location.origin}`
   const shareUrl = window.location.origin
   
   try {
-    // await navigator.clipboard.writeText(shareText)
     await navigator.clipboard.writeText(shareUrl)
-    alert('링크가 복사되었습니다!')
+    alert('링크가 복사되었습니다! 친구들에게 공유해보세요 💝')
   } catch {
     alert('링크 복사에 실패했습니다.')
   }
@@ -67,34 +137,77 @@ const share = async () => {
 <style scoped>
 .result-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 20px;
+  background: linear-gradient(135deg, #FFF0F7 0%, #F0E6FF 100%);
+  padding: 40px 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: gradientShift 10s ease infinite;
-  background-size: 200% 200%;
+  position: relative;
+  overflow: hidden;
 }
 
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
+/* 배경 장식 */
+.floating-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.deco {
+  position: absolute;
+  font-size: 2rem;
+  animation: twinkle 3s ease-in-out infinite;
+  opacity: 0.4;
+}
+
+.deco:nth-child(1) {
+  left: 15%;
+  top: 15%;
+  animation-delay: 0s;
+}
+
+.deco:nth-child(2) {
+  right: 15%;
+  top: 25%;
+  animation-delay: 0.7s;
+}
+
+.deco:nth-child(3) {
+  left: 10%;
+  bottom: 20%;
+  animation-delay: 1.4s;
+}
+
+.deco:nth-child(4) {
+  right: 20%;
+  bottom: 15%;
+  animation-delay: 2.1s;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
   }
   50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
+    opacity: 0.8;
+    transform: scale(1.2);
   }
 }
 
 .result-content {
   width: 100%;
-  max-width: 650px;
-  animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  max-width: 600px;
+  position: relative;
+  z-index: 1;
+  animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-@keyframes slideInUp {
+@keyframes slideUp {
   from {
     opacity: 0;
     transform: translateY(50px);
@@ -105,66 +218,86 @@ const share = async () => {
   }
 }
 
+/* 메인 카드 */
 .result-card {
   background: white;
-  border-radius: 25px;
-  padding: 3.5rem 2.5rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  text-align: center;
+  border-radius: 30px;
+  padding: 0;
+  box-shadow: 0 15px 50px rgba(255, 181, 216, 0.25);
   position: relative;
   overflow: hidden;
-}
-
-.result-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 5px;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-}
-
-.emoji {
-  font-size: 6rem;
   margin-bottom: 1.5rem;
-  animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.2s backwards;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 }
 
-@keyframes bounceIn {
+/* 상단 리본 */
+.ribbon {
+  background: linear-gradient(135deg, #FFB5D8 0%, #C4A5FF 100%);
+  padding: 0.8rem;
+  text-align: center;
+  color: white;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  animation: slideDown 0.6s ease 0.2s backwards;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* 이모지 영역 */
+.emoji-wrapper {
+  padding: 2.5rem 2rem 1.5rem;
+  text-align: center;
+}
+
+.emoji-circle {
+  display: inline-block;
+  width: 140px;
+  height: 140px;
+  background: linear-gradient(135deg, #FFE5F3 0%, #F3E5FF 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(255, 181, 216, 0.3);
+  animation: bounce 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.4s backwards;
+}
+
+@keyframes bounce {
   0% {
-    opacity: 0;
-    transform: scale(0.3);
+    transform: scale(0);
   }
   50% {
     transform: scale(1.1);
   }
   100% {
-    opacity: 1;
     transform: scale(1);
   }
 }
 
+.emoji {
+  font-size: 5rem;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.1));
+}
+
+/* 유형명 */
 .type-name {
   font-size: 2.2rem;
-  font-weight: bold;
-  color: #2d3748;
-  margin-bottom: 0.8rem;
-  animation: fadeIn 0.6s ease 0.4s backwards;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  font-weight: 900;
+  background: linear-gradient(135deg, #FFB5D8 0%, #C4A5FF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-}
-
-.subtitle {
-  font-size: 1.15rem;
-  color: #718096;
-  margin-bottom: 2.5rem;
-  line-height: 1.7;
-  animation: fadeIn 0.6s ease 0.5s backwards;
-  font-weight: 400;
+  text-align: center;
+  margin: 0 2rem 0.8rem;
+  animation: fadeIn 0.6s ease 0.6s backwards;
+  letter-spacing: -1px;
 }
 
 @keyframes fadeIn {
@@ -176,210 +309,244 @@ const share = async () => {
   }
 }
 
-.description {
-  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-  border-radius: 18px;
-  padding: 2rem;
-  margin-bottom: 1.8rem;
-  text-align: left;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e9ecef;
-  animation: fadeInUp 0.6s ease 0.6s backwards;
-  transition: transform 0.3s ease;
+.subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  text-align: center;
+  line-height: 1.6;
+  margin: 0 2rem 2rem;
+  font-weight: 500;
+  animation: fadeIn 0.6s ease 0.7s backwards;
+  word-break: keep-all;
 }
 
-.description:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+/* 구분선 */
+.divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #FFE5F3, transparent);
+  margin: 0 2rem 2rem;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* 정보 섹션 */
+.info-section {
+  margin: 0 2rem 2rem;
+  animation: fadeIn 0.6s ease 0.8s backwards;
 }
 
-.description h3 {
-  font-size: 1.15rem;
-  color: #667eea;
-  margin-bottom: 1rem;
-  font-weight: 700;
+.section-header {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-}
-
-.description h3::before {
-  content: '💝';
-  font-size: 1.2rem;
-}
-
-.description p {
-  font-size: 1.05rem;
-  color: #2d3748;
-  line-height: 1.8;
-  font-weight: 400;
-}
-
-.success-rate {
-  background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
-  border-radius: 18px;
-  padding: 2rem;
-  margin-bottom: 2.5rem;
-  text-align: left;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  border: 1px solid #fed7d7;
-  animation: fadeInUp 0.6s ease 0.7s backwards;
-  transition: transform 0.3s ease;
-}
-
-.success-rate:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-}
-
-.success-rate h3 {
-  font-size: 1.15rem;
-  color: #667eea;
+  gap: 0.6rem;
   margin-bottom: 1rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 }
 
-.success-rate h3::before {
-  content: '📊';
+.section-icon {
+  font-size: 1.5rem;
+}
+
+.section-header h3 {
   font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
 }
 
-.rate-number {
-  font-size: 2.2rem;
-  font-weight: bold;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 1rem;
-  animation: scaleIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.8s backwards;
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.5);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.rate-comment {
+.section-content {
   font-size: 1.05rem;
-  color: #2d3748;
+  color: var(--text-primary);
   line-height: 1.8;
-  font-weight: 400;
-}
-
-.buttons {
-  display: flex;
-  gap: 1.2rem;
-  animation: fadeIn 0.6s ease 0.9s backwards;
-}
-
-.restart-button,
-.share-button {
-  flex: 1;
+  word-break: keep-all;
+  background: #FFF8FC;
   padding: 1.2rem;
-  border: none;
-  border-radius: 18px;
-  font-size: 1.05rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
+  border-radius: 15px;
+  border-left: 4px solid #FFB5D8;
 }
 
-.restart-button::before,
-.share-button::before {
-  content: '';
+/* 썸 성공률 원형 게이지 */
+.success-rate-display {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+}
+
+.rate-circle {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+.rate-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.rate-bg {
+  fill: none;
+  stroke: #FFE5F3;
+  stroke-width: 8;
+}
+
+.rate-fill {
+  fill: none;
+  stroke: url(#gradient);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 283;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: drawCircle 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.9s backwards;
+}
+
+@keyframes drawCircle {
+  from {
+    stroke-dashoffset: 283;
+  }
+}
+
+.rate-text {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
   transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
+  text-align: center;
 }
 
-.restart-button:hover::before,
-.share-button:hover::before {
-  width: 300px;
-  height: 300px;
+.rate-number {
+  font-size: 3rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #FFB5D8 0%, #C4A5FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
 }
 
+.rate-percent {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+}
+
+/* SVG 그라데이션 */
+.rate-svg::before {
+  content: '';
+}
+
+/* 버튼들 */
+.buttons {
+  display: flex;
+  gap: 1rem;
+  padding: 0 2rem 2.5rem;
+  animation: fadeIn 0.6s ease 1s backwards;
+}
+
+.share-button,
 .restart-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  flex: 1;
+  padding: 1.2rem;
+  border: none;
+  border-radius: 20px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
-.restart-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+.button-icon {
+  font-size: 1.3rem;
 }
 
 .share-button {
   background: white;
-  color: #667eea;
-  border: 2.5px solid #667eea;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  color: #FFB5D8;
+  border: 3px solid #FFB5D8;
+  box-shadow: 0 4px 15px rgba(255, 181, 216, 0.2);
 }
 
 .share-button:hover {
-  background: #667eea;
-  color: white;
+  background: #FFF8FC;
   transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 25px rgba(255, 181, 216, 0.3);
 }
 
-.restart-button:active,
-.share-button:active {
+.restart-button {
+  background: linear-gradient(135deg, #FFB5D8 0%, #C4A5FF 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 181, 216, 0.3);
+}
+
+.restart-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(255, 181, 216, 0.4);
+}
+
+.share-button:active,
+.restart-button:active {
   transform: translateY(-1px);
 }
 
+/* 하단 메시지 */
+.bottom-message {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  font-weight: 600;
+  opacity: 0.8;
+  animation: fadeIn 0.6s ease 1.2s backwards;
+}
+
 @media (max-width: 768px) {
-  .result-card {
-    padding: 3rem 2rem;
+  .result-container {
+    padding: 30px 15px;
+  }
+
+  .emoji-circle {
+    width: 120px;
+    height: 120px;
   }
 
   .emoji {
-    font-size: 5rem;
+    font-size: 4rem;
   }
 
   .type-name {
     font-size: 1.9rem;
+    margin: 0 1.5rem 0.8rem;
   }
 
   .subtitle {
-    font-size: 1.05rem;
+    font-size: 1rem;
+    margin: 0 1.5rem 1.5rem;
+  }
+
+  .info-section {
+    margin: 0 1.5rem 1.5rem;
+  }
+
+  .section-content {
+    font-size: 1rem;
+    padding: 1rem;
+  }
+
+  .rate-circle {
+    width: 130px;
+    height: 130px;
   }
 
   .rate-number {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
 
   .buttons {
     flex-direction: column;
+    padding: 0 1.5rem 2rem;
+  }
+
+  .deco {
+    font-size: 1.5rem;
   }
 }
 </style>
