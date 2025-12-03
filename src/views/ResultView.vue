@@ -1,114 +1,135 @@
 <template>
   <div class="result-container">
-    <!-- SVG 그라데이션 정의 (숨김) -->
-    <svg width="0" height="0" style="position: absolute; pointer-events: none;">
-      <defs>
-        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style="stop-color:#FFB5D8;stop-opacity:1" />
-          <stop offset="100%" style="stop-color:#C4A5FF;stop-opacity:1" />
-        </linearGradient>
-      </defs>
-    </svg>
-
-    <!-- 배경 장식 -->
-    <div class="floating-decoration">
-      <span class="deco">✨</span>
-      <span class="deco">💫</span>
-      <span class="deco">⭐</span>
-      <span class="deco">🌟</span>
-    </div>
-
-    <div class="result-content">
-      <!-- 메인 결과 카드 -->
-      <div class="result-card">
-        <!-- 상단 리본 -->
-        <div class="ribbon">
-          <span>나의 연애 유형</span>
-        </div>
-
-        <!-- 이모지 -->
-        <div class="emoji-wrapper">
-          <div class="emoji-circle">
-            <div class="emoji">{{ resultData.emoji }}</div>
-          </div>
-        </div>
-
-        <!-- 유형명 -->
-        <h1 class="type-name">{{ resultData.name }}</h1>
-        <p class="subtitle">{{ resultData.subtitle }}</p>
-
-        <!-- 구분선 -->
-        <div class="divider"></div>
-
-        <!-- 연애 스타일 섹션 -->
-        <div class="info-section style-section">
-          <div class="section-header">
-            <span class="section-icon">💝</span>
-            <h3>연애 스타일</h3>
-          </div>
-          <p class="section-content">{{ resultData.description }}</p>
-        </div>
-
-        <!-- 썸 성공률 섹션 -->
-        <div class="info-section success-section">
-          <div class="section-header">
-            <span class="section-icon">📊</span>
-            <h3>썸 성공률</h3>
-          </div>
-          <div class="success-rate-display">
-            <div class="rate-circle">
-              <svg class="rate-svg" viewBox="0 0 100 100">
-                <circle class="rate-bg" cx="50" cy="50" r="45"></circle>
-                <circle 
-                  class="rate-fill" 
-                  cx="50" 
-                  cy="50" 
-                  r="45"
-                  :style="{ strokeDashoffset: rateOffset }"
-                ></circle>
-              </svg>
-              <div class="rate-text">
-                <span class="rate-number">{{ resultData.successRate }}</span>
-                <span class="rate-percent">%</span>
-              </div>
-            </div>
-          </div>
-          <p class="section-content">{{ resultData.comment }}</p>
-        </div>
-
-        <!-- 버튼들 -->
-        <div class="buttons">
-          <button class="share-button" @click="share">
-            <span class="button-icon">🔗</span>
-            <span>링크 복사</span>
-          </button>
-          <button class="restart-button" @click="restart">
-            <span class="button-icon">🔄</span>
-            <span>다시 하기</span>
-          </button>
+    <!-- 잘못된 접근 시 안내 화면 -->
+    <div v-if="hasError" class="error-overlay">
+      <div class="error-content">
+        <div class="error-emoji">🤔</div>
+        <h2 class="error-title">잘못된 접근이에요</h2>
+        <p class="error-message">
+          테스트를 먼저 진행해주세요!<br>
+          잠시 후 홈으로 이동합니다...
+        </p>
+        <div class="loading-dots">
+          <span></span>
+          <span></span>
+          <span></span>
         </div>
       </div>
-
-      <!-- 하단 메시지 -->
-      <p class="bottom-message">친구들도 테스트 해보세요!</p>
     </div>
+
+    <!-- 정상 결과 화면 -->
+    <template v-else>
+      <!-- SVG 그라데이션 정의 -->
+      <svg width="0" height="0" style="position: absolute; pointer-events: none;">
+        <defs>
+          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#FFB5D8;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#C4A5FF;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+      </svg>
+
+      <!-- 배경 장식 -->
+      <div class="floating-decoration">
+        <span class="deco">✨</span>
+        <span class="deco">💫</span>
+        <span class="deco">⭐</span>
+        <span class="deco">🌟</span>
+      </div>
+
+      <div class="result-content">
+        <!-- 메인 결과 카드 -->
+        <div class="result-card">
+          <!-- 상단 리본 -->
+          <div class="ribbon">
+            <span>나의 연애 유형</span>
+          </div>
+
+          <!-- 이모지 -->
+          <div class="emoji-wrapper">
+            <div class="emoji-circle">
+              <div class="emoji">{{ resultData.emoji }}</div>
+            </div>
+          </div>
+
+          <!-- 유형명 -->
+          <h1 class="type-name">{{ resultData.name }}</h1>
+          <p class="subtitle">{{ resultData.subtitle }}</p>
+
+          <!-- 구분선 -->
+          <div class="divider"></div>
+
+          <!-- 연애 스타일 섹션 -->
+          <div class="info-section style-section">
+            <div class="section-header">
+              <span class="section-icon">💝</span>
+              <h3>연애 스타일</h3>
+            </div>
+            <p class="section-content">{{ resultData.description }}</p>
+          </div>
+
+          <!-- 썸 성공률 섹션 -->
+          <div class="info-section success-section">
+            <div class="section-header">
+              <span class="section-icon">📊</span>
+              <h3>썸 성공률</h3>
+            </div>
+            <div class="success-rate-display">
+              <div class="rate-circle">
+                <svg class="rate-svg" viewBox="0 0 100 100">
+                  <circle class="rate-bg" cx="50" cy="50" r="45"></circle>
+                  <circle 
+                    class="rate-fill" 
+                    cx="50" 
+                    cy="50" 
+                    r="45"
+                    :style="{ strokeDashoffset: rateOffset }"
+                  ></circle>
+                </svg>
+                <div class="rate-text">
+                  <span class="rate-number">{{ resultData.successRate }}</span>
+                  <span class="rate-percent">%</span>
+                </div>
+              </div>
+            </div>
+            <p class="section-content">{{ resultData.comment }}</p>
+          </div>
+
+          <!-- 버튼들 -->
+          <div class="buttons">
+            <button class="share-button" @click="share">
+              <span class="button-icon">🔗</span>
+              <span>링크 복사</span>
+            </button>
+            <button class="restart-button" @click="restart">
+              <span class="button-icon">🔄</span>
+              <span>다시 하기</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 하단 메시지 -->
+        <p class="bottom-message">친구들도 테스트 해보세요!</p>
+      </div>
+    </template>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { results } from '../data/results'
 
 const router = useRouter()
 const route = useRoute()
+const hasError = ref(false)
 
 const resultType = computed(() => {
   return route.query.type || 'A'
 })
 
 const resultData = computed(() => {
-  return results[resultType.value]
+  return results[resultType.value] || results['A']
 })
 
 // 썸 성공률 원형 게이지용
@@ -116,6 +137,20 @@ const rateOffset = computed(() => {
   const rate = resultData.value.successRate
   const circumference = 2 * Math.PI * 45
   return circumference - (rate / 100) * circumference
+})
+
+// 잘못된 파라미터 체크 및 리다이렉트
+onMounted(() => {
+  const type = route.query.type
+  
+  if (!type || !results[type]) {
+    hasError.value = true
+    
+    // 2초 후 인트로로 이동
+    setTimeout(() => {
+      router.push('/')
+    }, 2000)
+  }
 })
 
 const restart = () => {
@@ -144,6 +179,106 @@ const share = async () => {
   align-items: center;
   position: relative;
   overflow: hidden;
+}
+
+/* 에러 오버레이 */
+.error-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(135deg, #FFF0F7 0%, #F0E6FF 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.error-content {
+  text-align: center;
+  padding: 0 20px;
+}
+
+.error-emoji {
+  font-size: 5rem;
+  margin-bottom: 1.5rem;
+  animation: bounceError 0.8s ease;
+}
+
+@keyframes bounceError {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.error-title {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #FFB5D8 0%, #C4A5FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+}
+
+.error-message {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  word-break: keep-all;
+}
+
+.loading-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.loading-dots span {
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(135deg, #FFB5D8 0%, #C4A5FF 100%);
+  border-radius: 50%;
+  animation: dotBounce 1.4s ease-in-out infinite;
+}
+
+.loading-dots span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.loading-dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.loading-dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dotBounce {
+  0%, 80%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
 }
 
 /* 배경 장식 */
@@ -266,10 +401,10 @@ const share = async () => {
   align-items: center;
   justify-content: center;
   box-shadow: 0 10px 30px rgba(255, 181, 216, 0.3);
-  animation: bounce 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.4s backwards;
+  animation: bounceIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.4s backwards;
 }
 
-@keyframes bounce {
+@keyframes bounceIn {
   0% {
     transform: scale(0);
   }
@@ -296,11 +431,11 @@ const share = async () => {
   background-clip: text;
   text-align: center;
   margin: 0 2rem 0.8rem;
-  animation: fadeIn 0.6s ease 0.6s backwards;
+  animation: fadeInText 0.6s ease 0.6s backwards;
   letter-spacing: -1px;
 }
 
-@keyframes fadeIn {
+@keyframes fadeInText {
   from {
     opacity: 0;
   }
@@ -316,7 +451,7 @@ const share = async () => {
   line-height: 1.6;
   margin: 0 2rem 2rem;
   font-weight: 500;
-  animation: fadeIn 0.6s ease 0.7s backwards;
+  animation: fadeInText 0.6s ease 0.7s backwards;
   word-break: keep-all;
 }
 
@@ -330,7 +465,7 @@ const share = async () => {
 /* 정보 섹션 */
 .info-section {
   margin: 0 2rem 2rem;
-  animation: fadeIn 0.6s ease 0.8s backwards;
+  animation: fadeInText 0.6s ease 0.8s backwards;
 }
 
 .section-header {
@@ -426,17 +561,12 @@ const share = async () => {
   color: var(--text-secondary);
 }
 
-/* SVG 그라데이션 */
-.rate-svg::before {
-  content: '';
-}
-
 /* 버튼들 */
 .buttons {
   display: flex;
   gap: 1rem;
   padding: 0 2rem 2.5rem;
-  animation: fadeIn 0.6s ease 1s backwards;
+  animation: fadeInText 0.6s ease 1s backwards;
 }
 
 .share-button,
@@ -495,12 +625,24 @@ const share = async () => {
   font-size: 0.95rem;
   font-weight: 600;
   opacity: 0.8;
-  animation: fadeIn 0.6s ease 1.2s backwards;
+  animation: fadeInText 0.6s ease 1.2s backwards;
 }
 
 @media (max-width: 768px) {
   .result-container {
     padding: 30px 15px;
+  }
+
+  .error-emoji {
+    font-size: 4rem;
+  }
+
+  .error-title {
+    font-size: 1.7rem;
+  }
+
+  .error-message {
+    font-size: 1.1rem;
   }
 
   .emoji-circle {

@@ -103,7 +103,7 @@ export const questions = [
       },
       { 
         label: "화나서 냉정하게 대한다", 
-        scores: { E: 1.0, H: 0.3 } 
+        scores: { H: 1.0, E: 0.3 }  // 수정: E → H
       }
     ]
   },
@@ -131,7 +131,7 @@ export const questions = [
     options: [
       { 
         label: "기분 좋아서 더 자주 올린다", 
-        scores: { E: 1.0, A: 0.3 } 
+        scores: { A: 1.0, E: 0.3 }  // 수정: E → A
       },
       { 
         label: "별로 의식 안 한다", 
@@ -157,7 +157,7 @@ export const questions = [
       },
       { 
         label: "자연스럽게 흐지부지되게 둔다", 
-        scores: { H: 1.0, D: 0.3 } 
+        scores: { D: 1.0, H: 0.3 }  // 수정: H → D
       }
     ]
   },
@@ -185,7 +185,7 @@ export const questions = [
     options: [
       { 
         label: "사랑받는 느낌이라 나쁘지 않다", 
-        scores: { E: 1.0, C: 0.3 } 
+        scores: { B: 1.0, E: 0.3 }  // 수정: E → B
       },
       { 
         label: "답답하고 숨막힌다", 
@@ -225,7 +225,7 @@ export const questions = [
       },
       { 
         label: "불안해서 자신 없다", 
-        scores: { E: 1.0, C: 0.3 } 
+        scores: { C: 1.0, E: 0.3 }  // 수정: E → C (주/서브 스왑)
       },
       { 
         label: "현실적으로 힘들 것 같다", 
@@ -247,7 +247,7 @@ export const questions = [
       },
       { 
         label: "나도 연락 안 한다", 
-        scores: { H: 1.0, D: 0.3 } 
+        scores: { D: 1.0, F: 0.3 }  // 수정: H → D
       }
     ]
   },
@@ -261,7 +261,7 @@ export const questions = [
       },
       { 
         label: "참았다가 나중에 폭발한다", 
-        scores: { E: 1.0, H: 0.3 } 
+        scores: { E: 1.0, G: 0.3 }  // 수정: 서브 H → G
       },
       { 
         label: "혼자 삭이고 넘어간다", 
@@ -293,7 +293,7 @@ export const questions = [
     options: [
       { 
         label: "기분 내키는 대로 쓴다", 
-        scores: { E: 1.0, A: 0.3 } 
+        scores: { A: 1.0, E: 0.3 }  // 수정: E → A
       },
       { 
         label: "공평하게 나눈다", 
@@ -315,7 +315,7 @@ export const questions = [
       },
       { 
         label: "최소화해야 한다", 
-        scores: { E: 1.0, C: 0.3 } 
+        scores: { C: 1.0, E: 0.3 }  // 수정: E → C
       },
       { 
         label: "완전히 끊어야 한다", 
@@ -355,7 +355,7 @@ export const questions = [
       },
       { 
         label: "단호하게 거절한다", 
-        scores: { H: 1.0, D: 0.3 } 
+        scores: { F: 1.0, H: 0.3 }  // 수정: H → F
       }
     ]
   }
