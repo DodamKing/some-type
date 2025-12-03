@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OG Image Generator</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+    #canvas-container {
+      margin-bottom: 20px;
+    }
+    canvas {
+      border: 2px solid #ccc;
+      display: block;
+    }
+    button {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+    button:hover {
+      background: #5568d3;
+    }
+  </style>
+</head>
+<body>
+  <h1>OG 이미지 생성기</h1>
+  <p>버전을 선택하세요:</p>
+  <button onclick="generateVersion1()">버전 1 (현재)</button>
+  <button onclick="generateVersion2()">버전 2 (개선)</button>
+  <div id="canvas-container">
+    <canvas id="ogCanvas" width="1200" height="630"></canvas>
+  </div>
+  <button onclick="downloadImage()">이미지 다운로드</button>
+
+  <script>
+    const canvas = document.getElementById('ogCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function generateVersion1() {
+      ctx.clearRect(0, 0, 1200, 630);
+      
+      // 그라데이션 배경
+      const gradient = ctx.createLinearGradient(0, 0, 1200, 630);
+      gradient.addColorStop(0, '#667eea');
+      gradient.addColorStop(1, '#764ba2');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 1200, 630);
+
+      // 이모지
+      ctx.font = 'bold 200px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('💝', 600, 200);
+
+      // 제목
+      ctx.font = 'bold 80px "Noto Sans KR", sans-serif';
+      ctx.fillStyle = 'white';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+      ctx.shadowBlur = 10;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 4;
+      ctx.fillText('썸타입', 600, 380);
+
+      // 부제
+      ctx.font = '45px "Noto Sans KR", sans-serif';
+      ctx.shadowBlur = 5;
+      ctx.fillText('나의 연애 성향 테스트', 600, 480);
+
+      // 설명
+      ctx.font = '35px "Noto Sans KR", sans-serif';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+      ctx.shadowBlur = 3;
+      ctx.fillText('20개의 질문으로 알아보는 나의 연애 스타일', 600, 560);
+    }
+
+    function generateVersion2() {
+      ctx.clearRect(0, 0, 1200, 630);
+      
+      // 그라데이션 배경
+      const gradient = ctx.createLinearGradient(0, 0, 1200, 630);
+      gradient.addColorStop(0, '#667eea');
+      gradient.addColorStop(1, '#764ba2');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 1200, 630);
+
+      // 이모지
+      ctx.font = 'bold 220px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('💝', 600, 180);
+
+      // 제목
+      ctx.font = 'bold 90px "Noto Sans KR", sans-serif';
+      ctx.fillStyle = 'white';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.4)';
+      ctx.shadowBlur = 15;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 5;
+      ctx.fillText('썸타입', 600, 360);
+
+      // 핵심 메시지 (더 크고 임팩트 있게)
+      ctx.font = 'bold 52px "Noto Sans KR", sans-serif';
+      ctx.shadowBlur = 8;
+      ctx.fillText('나는 어떤 연애 스타일?', 600, 460);
+
+      // CTA
+      ctx.font = 'bold 42px "Noto Sans KR", sans-serif';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+      ctx.shadowBlur = 5;
+      ctx.fillText('⭐ 썸 성공률 측정', 600, 550);
+    }
+
+    // 처음 로드 시 버전 2 생성
+    generateVersion2();
+
+    function downloadImage() {
+      const link = document.createElement('a');
+      link.download = 'og-image.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+  </script>
+</body>
+</html>
