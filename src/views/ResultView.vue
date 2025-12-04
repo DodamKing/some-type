@@ -125,7 +125,7 @@
 import { computed, ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { results } from '../data/results'
-import AdSense from '@/components/AdSense.vue'
+import AdSense from '../components/AdSense.vue'
 
 const router = useRouter()
 const route = useRoute()
