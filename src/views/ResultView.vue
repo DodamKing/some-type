@@ -95,6 +95,9 @@
             <p class="section-content">{{ resultData.comment }}</p>
           </div>
 
+          <!-- 광고 1: 버튼 위 -->
+          <AdSense />
+
           <!-- 버튼들 -->
           <div class="buttons">
             <button class="share-button" @click="share">
@@ -108,6 +111,9 @@
           </div>
         </div>
 
+        <!-- 광고 2: 버튼 아래 (카드 밖) -->
+        <AdSense />
+
         <!-- 하단 메시지 -->
         <p class="bottom-message">친구들도 테스트 해보세요!</p>
       </div>
@@ -119,6 +125,7 @@
 import { computed, ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { results } from '../data/results'
+import AdSense from '../components/Adsense.vue'
 
 const router = useRouter()
 const route = useRoute()
