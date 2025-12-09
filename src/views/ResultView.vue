@@ -266,35 +266,41 @@ const restart = () => {
 }
 
 const share = async () => {
-  const shareText = resultData.value.shareText
-  const shareUrl = window.location.origin // 홈 URL (테스트 시작 페이지)
-  const fullShareText = `${shareText}\n\n👉 ${shareUrl}`
+  const shareUrl = window.location.origin
   
   try {
-    // 모바일에서 네이티브 공유 지원 시 (카카오톡, 문자 등)
+    // 모바일: 네이티브 공유
     if (navigator.share) {
       await navigator.share({
-        title: '썸타입 테스트 결과',
-        text: fullShareText,
         url: shareUrl
       })
-    } else {
-      // PC에서는 클립보드 복사
-      await navigator.clipboard.writeText(fullShareText)
-      alert('링크가 복사되었습니다! 친구들에게 공유해보세요 💝')
+    } 
+    // PC: URL만 복사
+    else {
+      await navigator.clipboard.writeText(shareUrl)
+      alert('링크가 복사되었습니다! 💝')
     }
-  } catch {
-    // 복사 실패 시 대체 방법
+  } catch (err) {
+    if (err.name === 'AbortError') {
+      // 사용자가 공유 취소
+      return
+    }
+    
+    // 대체 복사 방법
     const textArea = document.createElement('textarea')
-    textArea.value = fullShareText
+    textArea.value = shareUrl
+    textArea.style.position = 'fixed'
+    textArea.style.opacity = '0'
     document.body.appendChild(textArea)
     textArea.select()
+    
     try {
       document.execCommand('copy')
-      alert('링크가 복사되었습니다! 친구들에게 공유해보세요 💝')
+      alert('링크가 복사되었습니다! 💝')
     } catch {
       alert('공유에 실패했습니다.')
     }
+    
     document.body.removeChild(textArea)
   }
 }
