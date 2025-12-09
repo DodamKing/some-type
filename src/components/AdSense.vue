@@ -10,20 +10,44 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, onBeforeUnmount, nextTick } from 'vue'
 
-onMounted(() => {
-  try {
-    (window.adsbygoogle = window.adsbygoogle || []).push({})
-  } catch (e) {
-    console.error('AdSense error:', e)
-  }
+let adPushed = false
+
+onMounted(async () => {
+  // DOM 완전히 렌더링될 때까지 대기
+  await nextTick()
+  
+  // 추가 지연 (레이아웃 안정화)
+  setTimeout(() => {
+    try {
+      if (!adPushed && window.adsbygoogle) {
+        (window.adsbygoogle = window.adsbygoogle || []).push({})
+        adPushed = true
+        console.log('✅ AdSense loaded')
+      }
+    } catch (e) {
+      console.error('❌ AdSense error:', e)
+    }
+  }, 300)
+})
+
+onBeforeUnmount(() => {
+  adPushed = false
 })
 </script>
 
 <style scoped>
 .adsense-container {
-  margin: 1.5rem 0;
+  width: 100%;
+  max-width: 100%;
   min-height: 100px;
+  display: block;
+}
+
+/* ins 태그 너비 강제 */
+.adsbygoogle {
+  display: block !important;
+  width: 100% !important;
 }
 </style>

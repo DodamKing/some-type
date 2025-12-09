@@ -888,16 +888,10 @@ const share = async () => {
 
 /* 광고 래퍼 */
 .ad-wrapper {
-  background: linear-gradient(135deg, #FFF8FC 0%, #F8F5FF 100%);
-  border-radius: 20px;
-  padding: 1.5rem;
-  margin: 0 0 1.5rem 0;
-  border: 2px dashed #FFE5F3;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100px;
-  transition: all 0.3s ease;
+  margin: 2rem 0; /* 여백 늘리기 */
+  padding: 0.5rem 0; /* 아주 작은 padding */
+  border-top: 1px solid rgba(255, 181, 216, 0.15); /* 얇은 선 */
+  border-bottom: 1px solid rgba(255, 181, 216, 0.15);
 }
 
 .ad-wrapper:hover {
@@ -907,8 +901,9 @@ const share = async () => {
 
 /* 중간 광고 (궁합 섹션 내부) */
 .ad-middle {
-  margin: 0 0 2rem 0;
+  margin: 2rem 0;
 }
+
 
 /* 버튼들 */
 .buttons {
