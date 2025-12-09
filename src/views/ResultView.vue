@@ -214,7 +214,7 @@
         <div class="buttons">
           <button class="share-button" @click="share">
             <span class="button-icon">🔗</span>
-            <span>결과 공유하기</span>
+            <span>링크 복사</span>
           </button>
           <button class="restart-button" @click="restart">
             <span class="button-icon">🔄</span>
