@@ -103,7 +103,7 @@ onMounted(() => {
   // 진행률 증가
   progressInterval = setInterval(() => {
     if (progress.value < 95) {
-      progress.value += Math.random() * 10
+      progress.value += Math.floor(Math.random() * 10) + 1
       if (progress.value > 95) progress.value = 95
     }
   }, 200)
