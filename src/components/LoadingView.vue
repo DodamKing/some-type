@@ -10,23 +10,40 @@
       </defs>
     </svg>
 
+    <!-- 떠다니는 장식들 -->
+    <div class="floating-decorations">
+      <span class="float-deco" style="left: 10%; top: 20%; animation-delay: 0s;">💕</span>
+      <span class="float-deco" style="right: 15%; top: 25%; animation-delay: 0.5s;">✨</span>
+      <span class="float-deco" style="left: 15%; bottom: 30%; animation-delay: 1s;">💖</span>
+      <span class="float-deco" style="right: 10%; bottom: 25%; animation-delay: 1.5s;">💫</span>
+      <span class="float-deco" style="left: 25%; top: 50%; animation-delay: 0.7s;">💝</span>
+      <span class="float-deco" style="right: 25%; bottom: 45%; animation-delay: 1.2s;">⭐</span>
+    </div>
+
     <div class="loading-content">
       <!-- 로딩 애니메이션 -->
       <div class="loader">
         <div class="heart-wrapper">
+          <!-- 반짝이는 배경 -->
+          <div class="sparkle-bg"></div>
+          
           <div class="heart-circle">
             <div class="heart">💝</div>
           </div>
+          
           <!-- 원형 progress -->
           <svg class="progress-ring" viewBox="0 0 120 120">
             <circle class="progress-bg" cx="60" cy="60" r="54"></circle>
             <circle class="progress-bar" cx="60" cy="60" r="54"></circle>
           </svg>
+
+          <!-- 진행률 표시 -->
+          <div class="progress-percent">{{ progress }}%</div>
         </div>
       </div>
 
       <!-- 로딩 텍스트 -->
-      <h2 class="loading-text">당신의 연애 성향을 분석 중...</h2>
+      <h2 class="loading-text">{{ currentMessage.text }}</h2>
 
       <!-- 도트 애니메이션 -->
       <div class="dots">
@@ -36,7 +53,10 @@
       </div>
 
       <!-- 서브 메시지 -->
-      <p class="loading-subtext">{{ currentMessage }}</p>
+      <p class="loading-subtext">
+        <span class="subtext-emoji">{{ currentMessage.emoji }}</span>
+        {{ currentMessage.sub }}
+      </p>
     </div>
   </div>
 </template>
@@ -45,27 +65,53 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const messages = [
-  '당신의 연애 스타일을 파악하고 있어요',
-  '썸 성공 패턴을 분석하고 있어요',
-  '최적의 연애 유형을 찾고 있어요',
-  '거의 다 됐어요!'
+  { 
+    text: '두근두근... 결과 나오는 중', 
+    emoji: '💕',
+    sub: '당신의 썸타입을 찾고 있어요!'
+  },
+  { 
+    text: '연애 스타일 분석 중', 
+    emoji: '✨',
+    sub: '완벽한 궁합을 찾는 중이에요'
+  },
+  { 
+    text: '찰떡궁합 계산 중', 
+    emoji: '💞',
+    sub: '딱 맞는 타입을 찾았어요!'
+  },
+  { 
+    text: '거의 다 왔어요!', 
+    emoji: '🎉',
+    sub: '곧 결과를 확인하실 수 있어요'
+  }
 ]
 
 const currentMessage = ref(messages[0])
+const progress = ref(0)
 let messageIndex = 0
-let interval = null
+let messageInterval = null
+let progressInterval = null
 
 onMounted(() => {
-  interval = setInterval(() => {
+  // 메시지 순환
+  messageInterval = setInterval(() => {
     messageIndex = (messageIndex + 1) % messages.length
     currentMessage.value = messages[messageIndex]
-  }, 800)
+  }, 700)
+
+  // 진행률 증가
+  progressInterval = setInterval(() => {
+    if (progress.value < 95) {
+      progress.value += Math.random() * 10
+      if (progress.value > 95) progress.value = 95
+    }
+  }, 200)
 })
 
 onUnmounted(() => {
-  if (interval) {
-    clearInterval(interval)
-  }
+  if (messageInterval) clearInterval(messageInterval)
+  if (progressInterval) clearInterval(progressInterval)
 })
 </script>
 
@@ -82,6 +128,7 @@ onUnmounted(() => {
   align-items: center;
   z-index: 9999;
   animation: fadeIn 0.3s ease;
+  overflow: hidden;
 }
 
 @keyframes fadeIn {
@@ -93,15 +140,54 @@ onUnmounted(() => {
   }
 }
 
+/* 떠다니는 장식들 */
+.floating-decorations {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.float-deco {
+  position: absolute;
+  font-size: 2rem;
+  animation: floatAround 4s ease-in-out infinite;
+  opacity: 0.4;
+}
+
+@keyframes floatAround {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg) scale(1);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateY(-20px) rotate(10deg) scale(1.1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-10px) rotate(-10deg) scale(0.9);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translateY(-15px) rotate(5deg) scale(1.05);
+    opacity: 0.5;
+  }
+}
+
 .loading-content {
   text-align: center;
   padding: 0 20px;
+  position: relative;
+  z-index: 1;
 }
 
 /* 로딩 애니메이션 */
 .loader {
   margin-bottom: 2.5rem;
-  animation: float 2s ease-in-out infinite;
+  animation: float 2.5s ease-in-out infinite;
 }
 
 @keyframes float {
@@ -109,15 +195,41 @@ onUnmounted(() => {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-15px);
+    transform: translateY(-20px);
   }
 }
 
 .heart-wrapper {
   position: relative;
-  width: 160px;
-  height: 160px;
+  width: 180px;
+  height: 180px;
   margin: 0 auto;
+}
+
+/* 반짝이는 배경 */
+.sparkle-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 140px;
+  height: 140px;
+  background: linear-gradient(135deg, #FFE5F3 0%, #F3E5FF 100%);
+  border-radius: 50%;
+  animation: sparkle 2s ease-in-out infinite;
+  opacity: 0.5;
+  z-index: 0;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.15) rotate(180deg);
+    opacity: 0.7;
+  }
 }
 
 .heart-circle {
@@ -125,35 +237,38 @@ onUnmounted(() => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 100px;
-  height: 100px;
+  width: 110px;
+  height: 110px;
   background: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 30px rgba(255, 181, 216, 0.3);
+  box-shadow: 0 10px 40px rgba(255, 181, 216, 0.4);
   z-index: 2;
 }
 
 .heart {
-  font-size: 4.5rem;
-  animation: heartbeat 1.5s ease-in-out infinite;
-  filter: drop-shadow(0 2px 8px rgba(255, 181, 216, 0.3));
+  font-size: 5rem;
+  animation: heartbeat 1.2s ease-in-out infinite;
+  filter: drop-shadow(0 4px 15px rgba(255, 181, 216, 0.4));
 }
 
 @keyframes heartbeat {
   0%, 100% {
-    transform: scale(1);
+    transform: scale(1) rotate(0deg);
   }
-  25% {
-    transform: scale(1.1);
+  10% {
+    transform: scale(1.1) rotate(-5deg);
   }
-  50% {
-    transform: scale(1);
+  20% {
+    transform: scale(1) rotate(0deg);
   }
-  75% {
-    transform: scale(1.15);
+  30% {
+    transform: scale(1.15) rotate(5deg);
+  }
+  40% {
+    transform: scale(1) rotate(0deg);
   }
 }
 
@@ -170,18 +285,18 @@ onUnmounted(() => {
 
 .progress-bg {
   fill: none;
-  stroke: white;
-  stroke-width: 6;
-  opacity: 0.3;
+  stroke: rgba(255, 181, 216, 0.2);
+  stroke-width: 7;
 }
 
 .progress-bar {
   fill: none;
   stroke: url(#loadingGradient);
-  stroke-width: 6;
+  stroke-width: 7;
   stroke-linecap: round;
   stroke-dasharray: 339;
   animation: progressSpin 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(255, 181, 216, 0.6));
 }
 
 @keyframes progressSpin {
@@ -196,24 +311,51 @@ onUnmounted(() => {
   }
 }
 
+/* 진행률 숫자 */
+.progress-percent {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #FFB5D8 0%, #C4A5FF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: countUp 0.3s ease;
+}
+
+@keyframes countUp {
+  from {
+    transform: translateX(-50%) scale(1.2);
+  }
+  to {
+    transform: translateX(-50%) scale(1);
+  }
+}
+
 /* 로딩 텍스트 */
 .loading-text {
-  font-size: 1.6rem;
-  font-weight: 800;
+  font-size: 1.8rem;
+  font-weight: 900;
   margin-bottom: 1.5rem;
   background: linear-gradient(135deg, #FFB5D8 0%, #C4A5FF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: pulse 2s ease-in-out infinite;
+  animation: textPulse 0.7s ease-in-out;
+  letter-spacing: -1px;
 }
 
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
+@keyframes textPulse {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
   }
-  50% {
-    opacity: 0.7;
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -221,17 +363,17 @@ onUnmounted(() => {
 .dots {
   display: flex;
   justify-content: center;
-  gap: 0.6rem;
-  margin-bottom: 2rem;
+  gap: 0.7rem;
+  margin-bottom: 1.5rem;
 }
 
 .dots span {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   background: linear-gradient(135deg, #FFB5D8 0%, #C4A5FF 100%);
   border-radius: 50%;
-  animation: bounce 1.4s ease-in-out infinite;
-  box-shadow: 0 2px 10px rgba(255, 181, 216, 0.4);
+  animation: dotBounce 1.4s ease-in-out infinite;
+  box-shadow: 0 4px 12px rgba(255, 181, 216, 0.5);
 }
 
 .dots span:nth-child(1) {
@@ -246,58 +388,106 @@ onUnmounted(() => {
   animation-delay: 0.4s;
 }
 
-@keyframes bounce {
+@keyframes dotBounce {
   0%, 80%, 100% {
-    transform: scale(0.8);
+    transform: scale(0.7) translateY(0);
     opacity: 0.5;
   }
   40% {
-    transform: scale(1.3);
+    transform: scale(1.4) translateY(-10px);
     opacity: 1;
   }
 }
 
 /* 서브 텍스트 */
 .loading-subtext {
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   color: var(--text-secondary);
-  font-weight: 600;
+  font-weight: 700;
   min-height: 30px;
-  animation: fadeInOut 0.8s ease-in-out infinite;
+  animation: subtextFade 0.7s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
-@keyframes fadeInOut {
-  0%, 100% {
-    opacity: 0.6;
+.subtext-emoji {
+  font-size: 1.5rem;
+  animation: emojiPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes emojiPop {
+  0% {
+    transform: scale(0) rotate(0deg);
   }
   50% {
-    opacity: 1;
+    transform: scale(1.3) rotate(10deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
   }
 }
 
+@keyframes subtextFade {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 반응형 */
 @media (max-width: 768px) {
   .heart-wrapper {
-    width: 140px;
-    height: 140px;
+    width: 160px;
+    height: 160px;
+  }
+
+  .sparkle-bg {
+    width: 120px;
+    height: 120px;
   }
 
   .heart-circle {
-    width: 90px;
-    height: 90px;
+    width: 100px;
+    height: 100px;
   }
 
   .heart {
-    font-size: 4rem;
+    font-size: 4.5rem;
   }
 
   .loading-text {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     padding: 0 1rem;
   }
 
   .loading-subtext {
     font-size: 1rem;
     padding: 0 1rem;
+  }
+
+  .float-deco {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .loading-text {
+    font-size: 1.3rem;
+  }
+
+  .loading-subtext {
+    font-size: 0.95rem;
+  }
+
+  .progress-percent {
+    font-size: 0.9rem;
+    bottom: -35px;
   }
 }
 </style>
