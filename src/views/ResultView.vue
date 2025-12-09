@@ -212,13 +212,13 @@
 
         <!-- 버튼들 -->
         <div class="buttons">
-          <button class="share-button" @click="share">
-            <span class="button-icon">🔗</span>
-            <span>링크 복사</span>
-          </button>
           <button class="restart-button" @click="restart">
             <span class="button-icon">🔄</span>
             <span>다시 테스트</span>
+          </button>
+          <button class="share-button" @click="share">
+            <span class="button-icon">🔗</span>
+            <span>공유 하기</span>
           </button>
         </div>
 
@@ -266,19 +266,22 @@ const restart = () => {
 }
 
 const share = async () => {
-  const shareUrl = window.location.origin
+  const shareUrl = `${window.location.origin}/share?type=${resultType.value}`
+  const shareText = `🎯 나는 ${resultData.value.name}!\n${resultData.value.hashtags.slice(0, 2).join(' ')}\n\n너의 썸타입은? 👇`
   
   try {
     // 모바일: 네이티브 공유
     if (navigator.share) {
       await navigator.share({
+        title: '썸타입 테스트',
+        text: shareText,
         url: shareUrl
       })
     } 
     // PC: URL만 복사
     else {
       await navigator.clipboard.writeText(shareUrl)
-      alert('링크가 복사되었습니다! 💝')
+      alert('링크가 복사되었습니다! 💝\n친구에게 공유해보세요!')
     }
   } catch (err) {
     if (err.name === 'AbortError') {
