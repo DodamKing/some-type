@@ -268,50 +268,63 @@ const restart = () => {
 const share = async () => {
   const shareUrl = `${window.location.origin}/share?type=${resultType.value}`
   const shareText = `🎯 나는 ${resultData.value.name}!\n${resultData.value.hashtags.slice(0, 2).join(' ')}\n\n너의 썸타입은? 👇`
-  
-  // 카카오톡 인앱 브라우저 감지
-  const isKakaoInApp = /KAKAOTALK/i.test(navigator.userAgent)
+  const fullText = `${shareText}\n\n${shareUrl}`
   
   try {
-    if (navigator.share) {
-      // 카카오톡에서는 text에 URL까지 포함
-      if (isKakaoInApp) {
-        await navigator.share({
-          title: '썸타입 테스트',
-          text: `${shareText}\n\n${shareUrl}`
-        })
-      } else {
-        // 다른 브라우저는 원래대로
-        await navigator.share({
-          title: '썸타입 테스트',
-          text: shareText,
-          url: shareUrl
-        })
-      }
-    } 
-    // PC: URL만 복사
-    else {
-      await navigator.clipboard.writeText(shareUrl)
+    // 네이티브 공유 지원 (모바일 브라우저)
+    if (navigator.share && navigator.canShare) {
+      await navigator.share({
+        title: '썸타입 테스트',
+        text: shareText,
+        url: shareUrl
+      })
+      return
+    }
+    
+    // 대체: 클립보드 복사 (PC, 카카오톡 인앱)
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(fullText)
       alert('링크가 복사되었습니다! 💝\n친구에게 공유해보세요!')
+      return
+    }
+    
+    // 최후 대체: execCommand (구형 브라우저)
+    fallbackCopy(fullText)
+    
+  } catch (err) {
+    // 사용자가 공유 취소한 경우
+    if (err.name === 'AbortError' || err.name === 'NotAllowedError') {
+      return
+    }
+    
+    // 에러 발생 시 fallback
+    console.error('Share failed:', err)
+    fallbackCopy(fullText)
+  }
+}
+
+// Fallback 복사 함수
+const fallbackCopy = (text) => {
+  const textArea = document.createElement('textarea')
+  textArea.value = text
+  textArea.style.position = 'fixed'
+  textArea.style.left = '-999999px'
+  textArea.style.top = '-999999px'
+  document.body.appendChild(textArea)
+  textArea.focus()
+  textArea.select()
+  
+  try {
+    const successful = document.execCommand('copy')
+    if (successful) {
+      alert('링크가 복사되었습니다! 💝\n친구에게 공유해보세요!')
+    } else {
+      alert('공유에 실패했습니다. 😢\n다시 시도해주세요!')
     }
   } catch (err) {
-    if (err.name === 'AbortError') return
-    
-    // 대체 복사 방법
-    const textArea = document.createElement('textarea')
-    textArea.value = shareUrl
-    textArea.style.position = 'fixed'
-    textArea.style.opacity = '0'
-    document.body.appendChild(textArea)
-    textArea.select()
-    
-    try {
-      document.execCommand('copy')
-      alert('링크가 복사되었습니다! 💝')
-    } catch {
-      alert('공유에 실패했습니다.')
-    }
-    
+    console.error('Fallback copy failed:', err)
+    alert('공유에 실패했습니다. 😢')
+  } finally {
     document.body.removeChild(textArea)
   }
 }

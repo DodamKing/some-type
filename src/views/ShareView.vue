@@ -3,41 +3,33 @@
     <div class="share-card">
       <!-- 이모지 -->
       <div class="emoji-big">{{ shareInfo.emoji }}</div>
-      
+
       <!-- 타입명 -->
       <h1 class="type-title">{{ shareInfo.title }}</h1>
-      
+
       <!-- 한줄 요약 -->
       <p class="one-liner">{{ shareInfo.oneLiner }}</p>
-      
+
       <!-- 핵심 특징 -->
       <div class="key-points">
-        <div 
-          v-for="(point, index) in shareInfo.keyPoints" 
-          :key="index"
-          class="point-item"
-        >
+        <div v-for="(point, index) in shareInfo.keyPoints" :key="index" class="point-item">
           {{ point }}
         </div>
       </div>
-      
+
       <!-- 찰떡 궁합 -->
       <div class="best-match">
         <span class="match-label">찰떡 궁합</span>
         <span class="match-name">{{ shareInfo.bestMatch }}</span>
       </div>
-      
+
       <!-- 해시태그 -->
       <div class="hashtags">
-        <span 
-          v-for="(tag, index) in shareInfo.hashtags" 
-          :key="index"
-          class="tag"
-        >
+        <span v-for="(tag, index) in shareInfo.hashtags" :key="index" class="tag">
           {{ tag }}
         </span>
       </div>
-      
+
       <!-- CTA 버튼들 -->
       <div class="cta-buttons">
         <button class="full-result-btn" @click="viewFullResult">
@@ -49,14 +41,14 @@
           <span>나도 테스트하기</span>
         </button>
       </div>
-      
+
       <!-- 공유하기 -->
       <button class="share-btn" @click="shareAgain">
         <span>🔗</span>
         <span>친구에게 공유하기</span>
       </button>
     </div>
-    
+
     <!-- 하단 로고 -->
     <p class="bottom-text">썸타입 테스트</p>
   </div>
@@ -93,44 +85,70 @@ const startTest = () => {
 
 const shareAgain = async () => {
   const shareUrl = window.location.href
-  const shareText = `
-🎯 나의 썸타입: ${shareInfo.value.title}
+  const shareText = `🎯 나의 썸타입: ${shareInfo.value.title}
 
-${shareInfo.value.keyPoints.join('\n')}
+  ${shareInfo.value.keyPoints.join('\n')}
 
-찰떡궁합: ${shareInfo.value.bestMatch}
+  찰떡궁합: ${shareInfo.value.bestMatch}
 
-나는 ${shareInfo.value.title}! 너의 썸타입은? 👇
-  `.trim()
-  
+  나는 ${shareInfo.value.title}! 너의 썸타입은? 👇`
+
+  const fullText = `${shareText}\n\n${shareUrl}`
+
   try {
-    if (navigator.share) {
+    // 네이티브 공유 지원 (모바일 브라우저)
+    if (navigator.share && navigator.canShare) {
       await navigator.share({
         title: `썸타입 테스트 - ${shareInfo.value.title}`,
         text: shareText,
-        url: shareUrl
+        url: shareUrl,
       })
+      return
+    }
+
+    // 대체: 클립보드 복사 (PC, 카카오톡 인앱)
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(fullText) // 👈 텍스트+URL
+      alert('링크가 복사되었습니다! 💝\n친구에게 공유해보세요!')
+      return
+    }
+
+    // 최후 대체: execCommand (구형 브라우저)
+    fallbackCopy(fullText)
+  } catch (err) {
+    // 사용자가 공유 취소한 경우
+    if (err.name === 'AbortError' || err.name === 'NotAllowedError') {
+      return
+    }
+
+    // 에러 발생 시 fallback
+    console.error('Share failed:', err)
+    fallbackCopy(fullText)
+  }
+}
+
+// Fallback 복사 함수
+const fallbackCopy = (text) => {
+  const textArea = document.createElement('textarea')
+  textArea.value = text
+  textArea.style.position = 'fixed'
+  textArea.style.left = '-999999px'
+  textArea.style.top = '-999999px'
+  document.body.appendChild(textArea)
+  textArea.focus()
+  textArea.select()
+
+  try {
+    const successful = document.execCommand('copy')
+    if (successful) {
+      alert('링크가 복사되었습니다! 💝\n친구에게 공유해보세요!')
     } else {
-      await navigator.clipboard.writeText(shareUrl)
-      alert('링크가 복사되었습니다! 💝')
+      alert('공유에 실패했습니다. 😢\n다시 시도해주세요!')
     }
   } catch (err) {
-    if (err.name === 'AbortError') return
-    
-    const textArea = document.createElement('textarea')
-    textArea.value = shareUrl
-    textArea.style.position = 'fixed'
-    textArea.style.opacity = '0'
-    document.body.appendChild(textArea)
-    textArea.select()
-    
-    try {
-      document.execCommand('copy')
-      alert('링크가 복사되었습니다! 💝')
-    } catch {
-      alert('공유에 실패했습니다.')
-    }
-    
+    console.error('Fallback copy failed:', err)
+    alert('공유에 실패했습니다. 😢')
+  } finally {
     document.body.removeChild(textArea)
   }
 }
@@ -139,7 +157,7 @@ ${shareInfo.value.keyPoints.join('\n')}
 <style scoped>
 .share-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #FFF0F7 0%, #F0E6FF 100%);
+  background: linear-gradient(135deg, #fff0f7 0%, #f0e6ff 100%);
   padding: 40px 20px;
   display: flex;
   flex-direction: column;
@@ -176,14 +194,19 @@ ${shareInfo.value.keyPoints.join('\n')}
 }
 
 @keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .type-title {
   font-size: 2.5rem;
   font-weight: 900;
-  background: linear-gradient(135deg, #FFB5D8 0%, #C4A5FF 100%);
+  background: linear-gradient(135deg, #ffb5d8 0%, #c4a5ff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -201,7 +224,7 @@ ${shareInfo.value.keyPoints.join('\n')}
 }
 
 .key-points {
-  background: linear-gradient(135deg, #FFF8FC 0%, #F8F5FF 100%);
+  background: linear-gradient(135deg, #fff8fc 0%, #f8f5ff 100%);
   border-radius: 20px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
@@ -217,7 +240,7 @@ ${shareInfo.value.keyPoints.join('\n')}
 }
 
 .best-match {
-  background: linear-gradient(135deg, #FFE5F3 0%, #F3E5FF 100%);
+  background: linear-gradient(135deg, #ffe5f3 0%, #f3e5ff 100%);
   border-radius: 15px;
   padding: 1rem 1.5rem;
   margin-bottom: 1.5rem;
@@ -228,13 +251,13 @@ ${shareInfo.value.keyPoints.join('\n')}
 
 .match-label {
   font-size: 0.95rem;
-  color: #C4A5FF;
+  color: #c4a5ff;
   font-weight: 700;
 }
 
 .match-name {
   font-size: 1.1rem;
-  color: #FFB5D8;
+  color: #ffb5d8;
   font-weight: 800;
 }
 
@@ -247,8 +270,8 @@ ${shareInfo.value.keyPoints.join('\n')}
 }
 
 .tag {
-  background: linear-gradient(135deg, #FFE5F3 0%, #F3E5FF 100%);
-  color: #C4A5FF;
+  background: linear-gradient(135deg, #ffe5f3 0%, #f3e5ff 100%);
+  color: #c4a5ff;
   padding: 0.4rem 1rem;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -278,14 +301,14 @@ ${shareInfo.value.keyPoints.join('\n')}
 }
 
 .full-result-btn {
-  background: linear-gradient(135deg, #FFB5D8 0%, #C4A5FF 100%);
+  background: linear-gradient(135deg, #ffb5d8 0%, #c4a5ff 100%);
   color: white;
 }
 
 .test-btn {
   background: white;
-  color: #FFB5D8;
-  border: 2px solid #FFB5D8;
+  color: #ffb5d8;
+  border: 2px solid #ffb5d8;
 }
 
 .full-result-btn:hover,
@@ -297,10 +320,10 @@ ${shareInfo.value.keyPoints.join('\n')}
 .share-btn {
   width: 100%;
   padding: 1rem;
-  border: 2px solid #FFE5F3;
+  border: 2px solid #ffe5f3;
   border-radius: 15px;
   background: white;
-  color: #C4A5FF;
+  color: #c4a5ff;
   font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
@@ -312,7 +335,7 @@ ${shareInfo.value.keyPoints.join('\n')}
 }
 
 .share-btn:hover {
-  background: #FFF8FC;
+  background: #fff8fc;
   transform: translateY(-2px);
 }
 
@@ -327,19 +350,19 @@ ${shareInfo.value.keyPoints.join('\n')}
   .share-card {
     padding: 2.5rem 1.5rem;
   }
-  
+
   .emoji-big {
     font-size: 5rem;
   }
-  
+
   .type-title {
     font-size: 2rem;
   }
-  
+
   .one-liner {
     font-size: 1.1rem;
   }
-  
+
   .cta-buttons {
     flex-direction: column;
   }
