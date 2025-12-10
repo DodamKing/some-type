@@ -269,14 +269,25 @@ const share = async () => {
   const shareUrl = `${window.location.origin}/share?type=${resultType.value}`
   const shareText = `🎯 나는 ${resultData.value.name}!\n${resultData.value.hashtags.slice(0, 2).join(' ')}\n\n너의 썸타입은? 👇`
   
+  // 카카오톡 인앱 브라우저 감지
+  const isKakaoInApp = /KAKAOTALK/i.test(navigator.userAgent)
+  
   try {
-    // 모바일: 네이티브 공유
     if (navigator.share) {
-      await navigator.share({
-        title: '썸타입 테스트',
-        text: shareText,
-        url: shareUrl
-      })
+      // 카카오톡에서는 text에 URL까지 포함
+      if (isKakaoInApp) {
+        await navigator.share({
+          title: '썸타입 테스트',
+          text: `${shareText}\n\n${shareUrl}`
+        })
+      } else {
+        // 다른 브라우저는 원래대로
+        await navigator.share({
+          title: '썸타입 테스트',
+          text: shareText,
+          url: shareUrl
+        })
+      }
     } 
     // PC: URL만 복사
     else {
@@ -284,10 +295,7 @@ const share = async () => {
       alert('링크가 복사되었습니다! 💝\n친구에게 공유해보세요!')
     }
   } catch (err) {
-    if (err.name === 'AbortError') {
-      // 사용자가 공유 취소
-      return
-    }
+    if (err.name === 'AbortError') return
     
     // 대체 복사 방법
     const textArea = document.createElement('textarea')
