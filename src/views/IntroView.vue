@@ -1,5 +1,5 @@
 <template>
-  <div class="intro-container">
+  <div class="intro-container" data-ad-client-disable="true">
     <!-- 떠다니는 장식들 -->
     <div class="floating-decoration">
       <span class="deco">💕</span>
