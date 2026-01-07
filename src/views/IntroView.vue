@@ -1,15 +1,12 @@
 <template>
-  <div class="intro-container" data-ad-client-disable="true">
+  <div class="intro-container">
     <!-- 떠다니는 장식들 -->
     <div class="floating-decoration">
       <span class="deco">💕</span>
       <span class="deco">💝</span>
       <span class="deco">💗</span>
-      <span class="deco">💖</span>
       <span class="deco">✨</span>
       <span class="deco">💫</span>
-      <span class="deco">⭐</span>
-      <span class="deco">🌟</span>
     </div>
 
     <div class="intro-content">
@@ -23,71 +20,50 @@
       <div class="title-wrapper">
         <h1 class="title">썸타입</h1>
         <p class="subtitle">나의 연애 스타일 테스트</p>
-        <div class="title-decoration">
-          <span class="sparkle">✨</span>
-          <span class="sparkle">✨</span>
-        </div>
       </div>
       
-      <!-- 정보 카드 -->
+      <!-- 정보 카드 - 컴팩트 -->
       <div class="description-card">
         <div class="desc-item">
           <span class="icon">💬</span>
-          <div class="desc-text">
-            <span class="desc-main">20개의 질문</span>
-            <span class="desc-sub">빠르게 끝나요!</span>
-          </div>
+          <span class="desc-text">20개 질문</span>
         </div>
         <div class="desc-item">
           <span class="icon">🎭</span>
-          <div class="desc-text">
-            <span class="desc-main">8가지 연애 유형</span>
-            <span class="desc-sub">나는 어떤 타입?</span>
-          </div>
+          <span class="desc-text">8가지 유형</span>
         </div>
         <div class="desc-item">
           <span class="icon">💞</span>
-          <div class="desc-text">
-            <span class="desc-main">궁합 분석</span>
-            <span class="desc-sub">찰떡궁합 찾기</span>
-          </div>
+          <span class="desc-text">궁합 분석</span>
         </div>
         <div class="desc-item">
-          <span class="icon">💡</span>
-          <div class="desc-text">
-            <span class="desc-main">연애 꿀팁</span>
-            <span class="desc-sub">실전 활용 가능!</span>
-          </div>
+          <span class="icon">⏱️</span>
+          <span class="desc-text">약 3분</span>
         </div>
       </div>
 
-      <!-- 소요시간 배지 -->
-      <div class="info-badges">
-        <div class="info-badge">
-          <span class="badge-icon">⏱️</span>
-          <span class="badge-text">약 3분 소요</span>
-        </div>
-        <div class="info-badge">
-          <span class="badge-icon">🎯</span>
-          <span class="badge-text">무료 테스트</span>
+      <!-- CTA 영역 (광고 삽입 방지) -->
+      <div class="cta-wrapper" data-ad-client-disable="true">
+        <!-- 시작 버튼 강조 영역 -->
+        <div class="button-section">
+          <div class="button-glow"></div>
+          <button class="start-button" @click="startTest">
+            <span class="button-shine"></span>
+            <span class="button-content">
+              <span class="button-icon">🚀</span>
+              <span class="button-text">테스트 시작</span>
+              <span class="button-emoji">💕</span>
+            </span>
+            <span class="button-pulse"></span>
+          </button>
         </div>
       </div>
 
-      <!-- 시작 버튼 -->
-      <button class="start-button" @click="startTest">
-        <span class="button-shine"></span>
-        <span class="button-text">테스트 시작하기</span>
-        <span class="button-emoji">💕</span>
-      </button>
-
-      <!-- 하단 문구 -->
-      <div class="bottom-section">
-        <p class="bottom-text">당신의 썸타입은? 💭</p>
-        <div class="bottom-tags">
-          <span class="tag">#연애테스트</span>
-          <span class="tag">#썸타입</span>
-          <span class="tag">#MBTI아님</span>
-        </div>
+      <!-- 하단 태그 -->
+      <div class="bottom-tags">
+        <span class="tag">#연애테스트</span>
+        <span class="tag">#썸타입</span>
+        <span class="tag">#무료</span>
       </div>
     </div>
   </div>
@@ -110,7 +86,7 @@ const startTest = () => {
   align-items: center;
   min-height: 100vh;
   background: linear-gradient(135deg, #FFF0F7 0%, #F0E6FF 100%);
-  padding: 40px 20px;
+  padding: 20px 20px;
   position: relative;
   overflow: hidden;
 }
@@ -130,44 +106,37 @@ const startTest = () => {
   position: absolute;
   font-size: 2rem;
   animation: float 8s ease-in-out infinite;
-  opacity: 0.4;
+  opacity: 0.3;
 }
 
 .deco:nth-child(1) { left: 10%; top: 15%; animation-delay: 0s; }
 .deco:nth-child(2) { right: 15%; top: 20%; animation-delay: 1s; }
 .deco:nth-child(3) { left: 15%; bottom: 25%; animation-delay: 2s; }
-.deco:nth-child(4) { right: 10%; bottom: 20%; animation-delay: 3s; }
-.deco:nth-child(5) { left: 25%; top: 40%; animation-delay: 1.5s; font-size: 1.5rem; }
-.deco:nth-child(6) { right: 25%; top: 50%; animation-delay: 2.5s; font-size: 1.5rem; }
-.deco:nth-child(7) { left: 20%; bottom: 40%; animation-delay: 3.5s; font-size: 1.5rem; }
-.deco:nth-child(8) { right: 20%; bottom: 35%; animation-delay: 0.5s; font-size: 1.5rem; }
+.deco:nth-child(4) { left: 20%; top: 50%; animation-delay: 1.5s; font-size: 1.5rem; }
+.deco:nth-child(5) { right: 20%; bottom: 40%; animation-delay: 2.5s; font-size: 1.5rem; }
 
 @keyframes float {
   0%, 100% {
     transform: translateY(0) rotate(0deg);
     opacity: 0.3;
   }
-  25% {
-    transform: translateY(-20px) rotate(5deg);
-    opacity: 0.5;
-  }
   50% {
-    transform: translateY(-10px) rotate(-5deg);
-    opacity: 0.4;
-  }
-  75% {
-    transform: translateY(-15px) rotate(3deg);
+    transform: translateY(-15px) rotate(5deg);
     opacity: 0.5;
   }
 }
 
 .intro-content {
   text-align: center;
-  max-width: 500px;
+  max-width: 450px;
   width: 100%;
   position: relative;
   z-index: 1;
   animation: slideUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
 }
 
 @keyframes slideUp {
@@ -185,7 +154,6 @@ const startTest = () => {
 .main-emoji-wrapper {
   position: relative;
   display: inline-block;
-  margin-bottom: 1.5rem;
 }
 
 .emoji-bg {
@@ -193,8 +161,8 @@ const startTest = () => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
   background: linear-gradient(135deg, #FFE5F3 0%, #F3E5FF 100%);
   border-radius: 50%;
   animation: pulse 3s ease-in-out infinite;
@@ -212,37 +180,37 @@ const startTest = () => {
 
 .main-emoji {
   position: relative;
-  font-size: 7rem;
+  font-size: 5rem;
   animation: bounce 2s ease-in-out infinite;
   filter: drop-shadow(0 10px 25px rgba(255, 181, 216, 0.4));
 }
 
 @keyframes bounce {
   0%, 100% {
-    transform: translateY(0) scale(1) rotate(0deg);
+    transform: translateY(0) scale(1);
   }
   50% {
-    transform: translateY(-20px) scale(1.05) rotate(5deg);
+    transform: translateY(-15px) scale(1.05);
   }
 }
 
 /* 타이틀 */
 .title-wrapper {
-  margin-bottom: 2rem;
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
 }
 
 .title {
-  font-size: 4rem;
+  font-size: 3.5rem;
   font-weight: 900;
   background: linear-gradient(135deg, #FFB5D8 0%, #C4A5FF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 0.5rem;
-  letter-spacing: -3px;
+  letter-spacing: -2px;
   animation: fadeIn 0.8s ease 0.2s backwards;
-  line-height: 1.2;
+  line-height: 1;
 }
 
 @keyframes fadeIn {
@@ -257,155 +225,141 @@ const startTest = () => {
 }
 
 .subtitle {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   color: var(--text-secondary);
   font-weight: 700;
   animation: fadeIn 0.8s ease 0.3s backwards;
   letter-spacing: -0.5px;
 }
 
-.title-decoration {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  margin-top: 0.8rem;
-}
-
-.sparkle {
-  font-size: 1.5rem;
-  animation: twinkle 2s ease-in-out infinite;
-}
-
-.sparkle:nth-child(1) {
-  animation-delay: 0s;
-}
-
-.sparkle:nth-child(2) {
-  animation-delay: 1s;
-}
-
-@keyframes twinkle {
-  0%, 100% {
-    opacity: 0.5;
-    transform: scale(1) rotate(0deg);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.3) rotate(180deg);
-  }
-}
-
-/* 정보 카드 */
+/* 정보 카드 - 컴팩트 버전 */
 .description-card {
   background: white;
-  border-radius: 30px;
-  padding: 2rem 1.5rem;
-  margin-bottom: 1.8rem;
-  box-shadow: 0 10px 40px rgba(255, 181, 216, 0.2);
+  border-radius: 25px;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 8px 30px rgba(255, 181, 216, 0.2);
   animation: fadeIn 0.8s ease 0.5s backwards;
-  border: 3px solid #FFE5F3;
+  border: 2px solid #FFE5F3;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+  width: 100%;
 }
 
 .desc-item {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 0.8rem;
+  gap: 0.3rem;
+  padding: 0.6rem 0.4rem;
   transition: all 0.3s ease;
-  border-radius: 15px;
+  border-radius: 12px;
 }
 
 .desc-item:hover {
   background: linear-gradient(135deg, #FFF8FC 0%, #F8F5FF 100%);
-  transform: translateX(5px);
-}
-
-.desc-item:not(:last-child) {
-  border-bottom: 2px dashed #FFE5F3;
+  transform: translateY(-2px);
 }
 
 .desc-item .icon {
-  font-size: 2rem;
-  flex-shrink: 0;
+  font-size: 1.8rem;
 }
 
 .desc-text {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* CTA 래퍼 - 광고 삽입 방지 */
+.cta-wrapper {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 0.2rem;
-}
-
-.desc-main {
-  font-size: 1.1rem;
-  color: var(--text-primary);
-  font-weight: 700;
-}
-
-.desc-sub {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-/* 배지들 */
-.info-badges {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-}
-
-.info-badge {
-  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  background: white;
-  padding: 0.8rem 1.5rem;
-  border-radius: 50px;
-  font-weight: 700;
-  box-shadow: 0 4px 15px rgba(255, 181, 216, 0.2);
-  animation: fadeIn 0.8s ease 0.7s backwards;
-  border: 2px solid #FFE5F3;
-  transition: all 0.3s ease;
+  width: 100%;
 }
 
-.info-badge:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(255, 181, 216, 0.3);
+/* 버튼 섹션 - 강조 영역 */
+.button-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.2rem 0;
 }
 
-.badge-icon {
-  font-size: 1.3rem;
+.button-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(255, 181, 216, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: glow-pulse 3s ease-in-out infinite;
+  pointer-events: none;
 }
 
-.badge-text {
-  font-size: 0.95rem;
-  color: var(--text-primary);
+@keyframes glow-pulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
 }
 
-/* 시작 버튼 */
+/* 시작 버튼 - 초강조 */
 .start-button {
   position: relative;
-  background: linear-gradient(135deg, #FFB5D8 0%, #C4A5FF 100%);
+  background: linear-gradient(135deg, #FF69B4 0%, #FF1493 50%, #C71585 100%);
   color: white;
   border: none;
-  border-radius: 50px;
-  padding: 1.5rem 4rem;
-  font-size: 1.3rem;
+  border-radius: 60px;
+  padding: 1.7rem 4.5rem;
+  font-size: 1.4rem;
   font-weight: 900;
   cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 10px 30px rgba(255, 181, 216, 0.4);
-  animation: fadeIn 0.8s ease 0.9s backwards;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 
+    0 15px 40px rgba(255, 20, 147, 0.5),
+    0 5px 15px rgba(255, 105, 180, 0.3),
+    inset 0 -5px 15px rgba(0, 0, 0, 0.1),
+    inset 0 3px 10px rgba(255, 255, 255, 0.3);
+  animation: buttonEntrance 0.8s ease 0.7s backwards, buttonFloat 3s ease-in-out 1.5s infinite;
   display: inline-flex;
   align-items: center;
-  gap: 0.8rem;
-  margin-bottom: 2rem;
+  justify-content: center;
   overflow: hidden;
   letter-spacing: -0.5px;
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  min-width: 280px;
+  z-index: 10;
+}
+
+@keyframes buttonEntrance {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes buttonFloat {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.02);
+  }
 }
 
 .button-shine {
@@ -414,8 +368,8 @@ const startTest = () => {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  animation: shine 3s infinite;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  animation: shine 2s infinite;
 }
 
 @keyframes shine {
@@ -427,56 +381,119 @@ const startTest = () => {
   }
 }
 
-.button-text {
+.button-content {
   position: relative;
   z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.button-icon {
+  font-size: 1.6rem;
+  animation: rocket 1.5s ease-in-out infinite;
+}
+
+@keyframes rocket {
+  0%, 100% {
+    transform: translateY(0) rotate(-10deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(10deg);
+  }
+}
+
+.button-text {
+  position: relative;
+  text-shadow: 
+    0 2px 10px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(255, 255, 255, 0.5);
 }
 
 .button-emoji {
-  position: relative;
-  z-index: 1;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   transition: transform 0.3s ease;
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  10%, 30% {
+    transform: scale(1.2);
+  }
+  20%, 40% {
+    transform: scale(1.1);
+  }
+}
+
+.button-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  border-radius: 60px;
+  border: 3px solid rgba(255, 20, 147, 0.6);
+  animation: pulse-ring 2s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulse-ring {
+  0% {
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+  }
+  100% {
+    width: 140%;
+    height: 140%;
+    opacity: 0;
+  }
 }
 
 .start-button:hover {
-  transform: translateY(-5px) scale(1.05);
-  box-shadow: 0 15px 40px rgba(255, 181, 216, 0.5);
+  transform: translateY(-8px) scale(1.08);
+  box-shadow: 
+    0 20px 50px rgba(255, 20, 147, 0.6),
+    0 10px 25px rgba(255, 105, 180, 0.4),
+    inset 0 -5px 15px rgba(0, 0, 0, 0.1),
+    inset 0 3px 10px rgba(255, 255, 255, 0.4);
+  background: linear-gradient(135deg, #FF1493 0%, #FF69B4 50%, #FF85C1 100%);
 }
 
 .start-button:hover .button-emoji {
-  transform: scale(1.3) rotate(10deg);
+  transform: scale(1.4) rotate(15deg);
+}
+
+.start-button:hover .button-icon {
+  transform: translateY(-10px) rotate(20deg);
 }
 
 .start-button:active {
-  transform: translateY(-2px) scale(1.02);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 
+    0 10px 30px rgba(255, 20, 147, 0.5),
+    0 5px 15px rgba(255, 105, 180, 0.3);
 }
 
-/* 하단 섹션 */
-.bottom-section {
-  animation: fadeIn 0.8s ease 1.1s backwards;
-}
-
-.bottom-text {
-  font-size: 1.05rem;
-  color: var(--text-secondary);
-  font-weight: 700;
-  margin-bottom: 1rem;
-}
-
+/* 하단 태그 */
 .bottom-tags {
   display: flex;
   justify-content: center;
-  gap: 0.6rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
+  animation: fadeIn 0.8s ease 0.9s backwards;
 }
 
 .tag {
   background: linear-gradient(135deg, #FFE5F3 0%, #F3E5FF 100%);
   color: #C4A5FF;
-  padding: 0.4rem 1rem;
+  padding: 0.35rem 0.9rem;
   border-radius: 20px;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: -0.3px;
   transition: all 0.3s ease;
@@ -487,58 +504,70 @@ const startTest = () => {
   box-shadow: 0 4px 12px rgba(196, 165, 255, 0.3);
 }
 
-/* 반응형 */
+/* 반응형 - 모바일 최적화 */
 @media (max-width: 768px) {
   .intro-container {
-    padding: 30px 15px;
+    padding: 15px 15px;
+  }
+
+  .intro-content {
+    gap: 1rem;
   }
 
   .emoji-bg {
-    width: 120px;
-    height: 120px;
+    width: 85px;
+    height: 85px;
   }
 
   .main-emoji {
-    font-size: 5.5rem;
+    font-size: 4.2rem;
   }
 
   .title {
-    font-size: 3rem;
-    letter-spacing: -2px;
+    font-size: 2.8rem;
+    letter-spacing: -1.5px;
   }
 
   .subtitle {
-    font-size: 1.2rem;
+    font-size: 1.05rem;
   }
 
   .description-card {
-    padding: 1.5rem 1.2rem;
+    padding: 0.8rem 1rem;
+    gap: 0.6rem;
   }
 
-  .desc-main {
-    font-size: 1rem;
+  .desc-item {
+    padding: 0.5rem 0.3rem;
   }
 
-  .desc-sub {
-    font-size: 0.8rem;
+  .desc-item .icon {
+    font-size: 1.6rem;
   }
 
-  .info-badges {
-    flex-direction: column;
-    align-items: center;
+  .desc-text {
+    font-size: 0.85rem;
+  }
+
+  .button-glow {
+    width: 300px;
+    height: 300px;
   }
 
   .start-button {
-    padding: 1.3rem 3rem;
-    font-size: 1.15rem;
+    padding: 1.5rem 3.8rem;
+    font-size: 1.25rem;
+    min-width: 260px;
   }
 
-  .bottom-text {
-    font-size: 1rem;
+  .button-icon,
+  .button-emoji {
+    font-size: 1.5rem;
   }
 
   .tag {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.8rem;
   }
 
   .deco {
@@ -547,29 +576,107 @@ const startTest = () => {
 }
 
 @media (max-width: 480px) {
+  .intro-container {
+    padding: 10px 15px;
+  }
+
+  .intro-content {
+    gap: 0.9rem;
+  }
+
+  .emoji-bg {
+    width: 75px;
+    height: 75px;
+  }
+
+  .main-emoji {
+    font-size: 3.8rem;
+  }
+
   .title {
     font-size: 2.5rem;
   }
 
   .subtitle {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   .description-card {
-    padding: 1.3rem 1rem;
+    padding: 0.7rem 0.9rem;
+    gap: 0.5rem;
   }
 
   .desc-item {
-    padding: 0.8rem 0.5rem;
+    padding: 0.4rem 0.2rem;
   }
 
   .desc-item .icon {
-    font-size: 1.7rem;
+    font-size: 1.5rem;
+  }
+
+  .desc-text {
+    font-size: 0.8rem;
+  }
+
+  .button-section {
+    padding: 1rem 0;
+  }
+
+  .button-glow {
+    width: 250px;
+    height: 250px;
   }
 
   .start-button {
-    padding: 1.2rem 2.5rem;
+    padding: 1.4rem 3.5rem;
+    font-size: 1.15rem;
+    min-width: 240px;
+  }
+
+  .button-icon,
+  .button-emoji {
+    font-size: 1.4rem;
+  }
+
+  .tag {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.7rem;
+  }
+}
+
+@media (max-width: 390px) {
+  .intro-content {
+    gap: 0.8rem;
+  }
+
+  .main-emoji {
+    font-size: 3.5rem;
+  }
+
+  .title {
+    font-size: 2.3rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+  }
+
+  .description-card {
+    padding: 0.6rem 0.8rem;
+  }
+
+  .desc-item .icon {
+    font-size: 1.4rem;
+  }
+
+  .desc-text {
+    font-size: 0.75rem;
+  }
+
+  .start-button {
+    padding: 1.3rem 3rem;
     font-size: 1.1rem;
+    min-width: 220px;
   }
 }
 </style>

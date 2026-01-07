@@ -24,7 +24,6 @@ onMounted(async () => {
       if (!adPushed && window.adsbygoogle) {
         (window.adsbygoogle = window.adsbygoogle || []).push({})
         adPushed = true
-        console.log('✅ AdSense loaded')
       }
     } catch (e) {
       console.error('❌ AdSense error:', e)

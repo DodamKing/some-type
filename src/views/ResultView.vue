@@ -40,8 +40,8 @@
       </div>
 
       <div class="result-content">
-        <!-- 메인 결과 카드 -->
-        <div class="result-card main-card">
+        <!-- 메인 결과 카드 (스크린샷용 - 응원 메시지 포함) -->
+        <div class="result-card main-card screenshot-card">
           <!-- 상단 리본 -->
           <div class="ribbon">
             <span>나의 썸타입 결과</span>
@@ -69,24 +69,27 @@
             </span>
           </div>
 
-          <!-- 구분선 -->
-          <div class="divider"></div>
-
-          <!-- 기본 설명 -->
-          <div class="info-section description-section">
-            <div class="section-header">
-              <span class="section-icon">💝</span>
-              <h3>당신은 이런 사람</h3>
-            </div>
-            <div class="section-content description-content">
-              {{ resultData.description }}
-            </div>
+          <!-- 응원 메시지 (캡처 카드 안에 통합) -->
+          <div class="encouragement-inline">
+            <div class="encouragement-icon">✨</div>
+            <p class="encouragement-text">{{ resultData.encouragement }}</p>
           </div>
+        </div>
 
-          <!-- 광고 1 -->
-          <div class="ad-wrapper">
-            <AdSense />
+        <!-- 기본 설명 카드 (스크롤 후 보임) -->
+        <div class="result-card description-card">
+          <div class="section-header">
+            <span class="section-icon">💝</span>
+            <h3>당신은 이런 사람</h3>
           </div>
+          <div class="description-content">
+            {{ resultData.description }}
+          </div>
+        </div>
+
+        <!-- 광고 1 -->
+        <div class="ad-wrapper">
+          <AdSense />
         </div>
 
         <!-- 섹션별 카드들 -->
@@ -199,13 +202,7 @@
           </div>
         </div>
 
-        <!-- 응원 메시지 카드 -->
-        <div class="result-card encouragement-card">
-          <div class="encouragement-icon">🌟</div>
-          <p class="encouragement-text">{{ resultData.encouragement }}</p>
-        </div>
-
-        <!-- 광고 3: 응원 메시지 아래 (마지막 광고) -->
+        <!-- 광고 3: 마지막 광고 -->
         <div class="ad-wrapper">
           <AdSense />
         </div>
@@ -334,10 +331,10 @@ const fallbackCopy = (text) => {
 .result-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #FFF0F7 0%, #F0E6FF 100%);
-  padding: 40px 20px;
+  padding: 20px 20px;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   position: relative;
   overflow: hidden;
 }
@@ -553,32 +550,33 @@ const fallbackCopy = (text) => {
   }
 }
 
-/* 메인 카드 */
-.main-card {
+/* 메인 카드 (스크린샷용 - 응원 메시지 포함) */
+.screenshot-card {
   padding: 0;
+  border: 3px solid #FFB5D8;
 }
 
 /* 상단 리본 */
 .ribbon {
   background: linear-gradient(135deg, #FFB5D8 0%, #C4A5FF 100%);
-  padding: 0.8rem;
+  padding: 0.7rem;
   text-align: center;
   color: white;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   letter-spacing: 0.5px;
 }
 
-/* 이모지 영역 */
+/* 이모지 영역 - 컴팩트 */
 .emoji-wrapper {
-  padding: 2.5rem 2rem 1.5rem;
+  padding: 2rem 2rem 1.2rem;
   text-align: center;
 }
 
 .emoji-circle {
   display: inline-block;
-  width: 140px;
-  height: 140px;
+  width: 130px;
+  height: 130px;
   background: linear-gradient(135deg, #FFE5F3 0%, #F3E5FF 100%);
   border-radius: 50%;
   display: flex;
@@ -601,68 +599,90 @@ const fallbackCopy = (text) => {
 }
 
 .emoji {
-  font-size: 5rem;
+  font-size: 4.5rem;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.1));
 }
 
-/* 유형명 */
+/* 유형명 - 컴팩트 */
 .type-name {
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-weight: 900;
   background: linear-gradient(135deg, #FFB5D8 0%, #C4A5FF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-align: center;
-  margin: 0 2rem 0.8rem;
+  margin: 0 1.5rem 0.6rem;
   letter-spacing: -1px;
 }
 
 .subtitle {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: var(--text-secondary);
   text-align: center;
-  line-height: 1.6;
-  margin: 0 2rem 1.2rem;
-  font-weight: 500;
+  line-height: 1.5;
+  margin: 0 1.5rem 1rem;
+  font-weight: 600;
   word-break: keep-all;
 }
 
-/* 해시태그 */
+/* 해시태그 - 컴팩트 */
 .hashtags {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.6rem;
-  padding: 0 2rem 1.5rem;
+  gap: 0.5rem;
+  padding: 0 1.5rem 1.2rem;
 }
 
 .hashtag {
   background: linear-gradient(135deg, #FFE5F3 0%, #F3E5FF 100%);
   color: #C4A5FF;
-  padding: 0.4rem 1rem;
+  padding: 0.35rem 0.9rem;
   border-radius: 20px;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: -0.3px;
-  transition: all 0.3s ease;
 }
 
-.hashtag:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(196, 165, 255, 0.3);
+/* 응원 메시지 (메인 카드에 통합) */
+.encouragement-inline {
+  padding: 1.3rem 1.5rem;
+  margin: 0 1.5rem 1.8rem;
+  background: linear-gradient(135deg, #FFF8FC 0%, #F8F5FF 100%);
+  border-radius: 20px;
+  border: 2px dashed #FFB5D8;
+  text-align: center;
 }
 
-/* 구분선 */
-.divider {
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #FFE5F3, transparent);
-  margin: 0 2rem 2rem;
+.encouragement-inline .encouragement-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  animation: twinkle 2s ease-in-out infinite;
 }
 
-/* 섹션 공통 */
-.info-section {
-  margin: 0 2rem 2rem;
+@keyframes twinkle {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+.encouragement-inline .encouragement-text {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  line-height: 1.7;
+  font-weight: 600;
+  word-break: keep-all;
+}
+
+/* 기본 설명 카드 (스크롤 후 보임) */
+.description-card {
+  padding: 1.8rem;
 }
 
 .section-header {
@@ -682,19 +702,16 @@ const fallbackCopy = (text) => {
   color: var(--text-primary);
 }
 
-.section-content {
-  font-size: 1.05rem;
-  color: var(--text-primary);
-  line-height: 1.9;
-  word-break: keep-all;
-}
-
 .description-content {
   background: linear-gradient(135deg, #FFF8FC 0%, #F8F5FF 100%);
-  padding: 1.5rem;
+  padding: 1.3rem;
   border-radius: 20px;
   border: 2px solid #FFE5F3;
   white-space: pre-line;
+  font-size: 1rem;
+  color: var(--text-primary);
+  line-height: 1.8;
+  word-break: keep-all;
 }
 
 /* 섹션 카드 */
@@ -883,57 +900,18 @@ const fallbackCopy = (text) => {
   word-break: keep-all;
 }
 
-/* 응원 메시지 */
-.encouragement-card {
-  background: linear-gradient(135deg, #FFE5F3 0%, #F3E5FF 100%);
-  padding: 2rem;
-  text-align: center;
-  border: 3px solid #FFB5D8;
-}
-
-.encouragement-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  animation: twinkle 2s ease-in-out infinite;
-}
-
-@keyframes twinkle {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.2);
-    opacity: 0.8;
-  }
-}
-
-.encouragement-text {
-  font-size: 1.1rem;
-  color: var(--text-primary);
-  line-height: 1.8;
-  font-weight: 600;
-  word-break: keep-all;
-}
-
 /* 광고 래퍼 */
 .ad-wrapper {
-  margin: 2rem 0; /* 여백 늘리기 */
-  padding: 0.5rem 0; /* 아주 작은 padding */
-  border-top: 1px solid rgba(255, 181, 216, 0.15); /* 얇은 선 */
+  margin: 2rem 0;
+  padding: 0.5rem 0;
+  border-top: 1px solid rgba(255, 181, 216, 0.15);
   border-bottom: 1px solid rgba(255, 181, 216, 0.15);
-}
-
-.ad-wrapper:hover {
-  border-color: #FFB5D8;
-  background: linear-gradient(135deg, #FFF0F7 0%, #F0E6FF 100%);
 }
 
 /* 중간 광고 (궁합 섹션 내부) */
 .ad-middle {
   margin: 2rem 0;
 }
-
 
 /* 버튼들 */
 .buttons {
@@ -1005,7 +983,7 @@ const fallbackCopy = (text) => {
 /* 반응형 */
 @media (max-width: 768px) {
   .result-container {
-    padding: 30px 15px;
+    padding: 15px 15px;
   }
 
   .error-emoji {
@@ -1020,9 +998,13 @@ const fallbackCopy = (text) => {
     font-size: 1.1rem;
   }
 
+  .emoji-wrapper {
+    padding: 1.8rem 1.5rem 1rem;
+  }
+
   .emoji-circle {
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
   }
 
   .emoji {
@@ -1030,32 +1012,45 @@ const fallbackCopy = (text) => {
   }
 
   .type-name {
-    font-size: 1.9rem;
-    margin: 0 1.5rem 0.8rem;
+    font-size: 1.8rem;
+    margin: 0 1.2rem 0.5rem;
   }
 
   .subtitle {
-    font-size: 1rem;
-    margin: 0 1.5rem 1rem;
+    font-size: 0.95rem;
+    margin: 0 1.2rem 0.8rem;
   }
 
   .hashtags {
-    padding: 0 1.5rem 1.2rem;
-    gap: 0.5rem;
+    padding: 0 1.2rem 1rem;
+    gap: 0.4rem;
   }
 
   .hashtag {
-    font-size: 0.8rem;
-    padding: 0.35rem 0.85rem;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.8rem;
   }
 
-  .info-section {
-    margin: 0 1.5rem 1.5rem;
+  .encouragement-inline {
+    padding: 1.2rem 1.2rem;
+    margin: 0 1.2rem 1.5rem;
+  }
+
+  .encouragement-inline .encouragement-icon {
+    font-size: 1.8rem;
+  }
+
+  .encouragement-inline .encouragement-text {
+    font-size: 0.9rem;
+  }
+
+  .description-card {
+    padding: 1.5rem;
   }
 
   .description-content {
     padding: 1.2rem;
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
   .section-card {
@@ -1076,16 +1071,53 @@ const fallbackCopy = (text) => {
     font-size: 0.95rem;
   }
 
-  .encouragement-text {
-    font-size: 1rem;
-  }
-
   .buttons {
     flex-direction: column;
   }
 
   .deco {
     font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .ribbon {
+    font-size: 0.85rem;
+    padding: 0.6rem;
+  }
+
+  .emoji-wrapper {
+    padding: 1.5rem 1.2rem 0.8rem;
+  }
+
+  .emoji-circle {
+    width: 100px;
+    height: 100px;
+  }
+
+  .emoji {
+    font-size: 3.5rem;
+  }
+
+  .type-name {
+    font-size: 1.6rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+  }
+
+  .hashtag {
+    font-size: 0.7rem;
+  }
+
+  .encouragement-inline {
+    padding: 1rem;
+    margin: 0 1rem 1.3rem;
+  }
+
+  .encouragement-inline .encouragement-text {
+    font-size: 0.85rem;
   }
 }
 </style>
